@@ -1,0 +1,18 @@
+%%-*- mode: erlang -*-
+{application, http_router,
+ [
+  {description, "http_router"},
+  {vsn, "1"},
+  {modules, []},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib,
+                  inets,
+                  crypto,
+                  mochiweb,
+                  webmachine
+                 ]},
+  {mod, { http_router_app, []}},
+  {env, []}
+ ]}.
