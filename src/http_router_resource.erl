@@ -80,12 +80,20 @@ proxy_request(RP, {ok, _Server}) ->
 %% retrieve server address based on hostname from redis
 %% example response: {ok, 'http://example.com:80/'}
 retrieve_host(Hostname) ->
-  {ok, _DB} = eredis:start_link(),
-  {_Status, _Server} = eredis:q(_DB, ["GET", Hostname]),
-  case is_binary(_Server) of
-    true  -> {ok, binary_to_list(_Server)};
-    false -> {error, "Could not find server for that hostname!"}
-  end.
+    process_flag(trap_exit, true),
+
+    case catch eredis:start_link() of
+        {'EXIT', {connection_error, _}} ->
+            {error, "Unable to connect to database!"};
+        {ok, DB} ->
+            {_, Server} = eredis:q(DB, ["GET", Hostname]),
+
+            case is_binary(Server) of
+                true  -> {ok, binary_to_list(Server)};
+                false -> {error, "Could not find server for that hostname!"}
+            end;
+        _ -> {error, "Unknown"}
+    end.
 
 %% ibrowse will recalculate Host and Content-Length headers,
 %% and will muck them up if they're manually specified
