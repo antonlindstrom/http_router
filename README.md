@@ -13,6 +13,19 @@ http-router is a project to learn Erlang and use it in real projects.
     make
     ./start.sh
 
+### Release
+
+There is a sample `reltool.config` in the rel/ directory. Do the following to
+release:
+
+    cd rel/
+    ../rebar create-node nodeid=http_router
+    ../rebar generate
+
+Run the release:
+
+    ./rel/http_router/bin/http_router start
+
 ## Usage
 
 http-router fetches a key from Redis based on the host header and redirects to
