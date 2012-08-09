@@ -7,6 +7,7 @@
   init/1,
   set_headers/2,
   retrieve_host/1,
+  add_root_path/1,
   proxy_request/2,
   service_available/2
   ]).
@@ -51,7 +52,7 @@ proxy_request(RP, {ok, _Server}) ->
 
     %% point path at server
     Path = lists:append(
-             [_Server,
+             [add_root_path(_Server),
               wrq:disp_path(RP),
               case wrq:req_qs(RP) of
                   [] -> [];
@@ -93,6 +94,16 @@ retrieve_host(Hostname) ->
                 false -> {error, "Could not find server for that hostname!"}
             end;
         _ -> {error, "Unknown"}
+    end.
+
+%% Add / at the end of the url if it does not exist
+add_root_path(Url) ->
+    Length   = string:len(Url),
+    LastChar = string:sub_string(Url, Length, Length),
+
+    case LastChar of
+        "/" -> Url;
+        _   -> string:concat(Url, "/")
     end.
 
 %% ibrowse will recalculate Host and Content-Length headers,
