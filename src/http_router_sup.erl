@@ -4,7 +4,6 @@
 %% @doc Supervisor for the http_router application.
 
 -module(http_router_sup).
--author('author <author@example.com>').
 
 -behaviour(supervisor).
 
@@ -41,13 +40,20 @@ upgrade() ->
 %% @spec init([]) -> SupervisorTree
 %% @doc supervisor callback.
 init([]) ->
-    Ip = case os:getenv("WEBMACHINE_IP") of false -> "0.0.0.0"; Any -> Any end,
+    Ip = case os:getenv("WEBMACHINE_IP") of
+        false -> "0.0.0.0";
+        Any -> Any
+    end,
+    Port = case os:getenv("HTTP_PORT") of
+        false -> "8000";
+        Val -> list_to_integer(Val)
+    end,
     {ok, App} = application:get_application(?MODULE),
     {ok, Dispatch} = file:consult(filename:join([code:priv_dir(App),
                                                  "dispatch.conf"])),
     WebConfig = [
                  {ip, Ip},
-                 {port, 8000},
+                 {port, Port},
                  {log_dir, "priv/log"},
                  {dispatch, Dispatch}],
     Web = {webmachine_mochiweb,
