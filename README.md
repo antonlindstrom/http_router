@@ -26,6 +26,12 @@ The request to app.example.com will then be proxied to localhost:3000.
 The proxy listens on port 8000. Redis should be on the local host listening on
 the default port (6379).
 
+The following environment variables changes default behaviour:
+
+    HTTP_PORT=80            # Set listening port to 80
+    REDIS_HOST=192.168.1.5  # Set Redis host to 192.168.1.5
+    REDIS_PORT=5000         # Set Redis port to 5000
+
 #### Quickstart
 
     make

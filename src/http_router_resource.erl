@@ -6,6 +6,7 @@
 -export([
   init/1,
   set_headers/2,
+  read_env/2,
   retrieve_host/1,
   add_root_path/1,
   proxy_request/2,
@@ -83,7 +84,10 @@ proxy_request(RP, {ok, _Server}) ->
 retrieve_host(Hostname) ->
     process_flag(trap_exit, true),
 
-    case catch eredis:start_link() of
+    Host = read_env("REDIS_HOST", "localhost"),
+    Port = list_to_integer(read_env("REDIS_PORT", "6379")),
+
+    case catch eredis:start_link(Host, Port) of
         {'EXIT', {connection_error, _}} ->
             {error, "Unable to connect to database!"};
         {ok, DB} ->
@@ -104,6 +108,14 @@ add_root_path(Url) ->
     case LastChar of
         "/" -> Url;
         _   -> string:concat(Url, "/")
+    end.
+
+%% Helper for reading variables and return.
+%% Returns DefaultVar if not set
+read_env(EnvVar, DefaultVar) ->
+    case os:getenv(EnvVar) of
+        false -> DefaultVar;
+        Val   -> Val
     end.
 
 %% ibrowse will recalculate Host and Content-Length headers,
