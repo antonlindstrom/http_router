@@ -40,7 +40,7 @@ The following environment variables changes default behaviour:
 #### Step by step
 
 Serving `http://localhost:3000` through the proxy on hostname 
-`app.example.com`:
+`app.example.com` (proxy is listening on port 8000):
 
 1. Install redis-server (Ubuntu: apt-get install redis-server)
 2. Install erlang (Ubuntu: apt-get install erlang-base)
@@ -49,12 +49,13 @@ Serving `http://localhost:3000` through the proxy on hostname
 5. Compile: `make`
 6. Try it: `./start.sh`
 7. Point app.example.com to your host in `/etc/hosts`
-8. Enter app.example.com:8000 in your browser.
+8. Insert mapping in redis, see the description below.
+9. Enter app.example.com:8000 in your browser.
 
 Adding a virtualhost in redis:
 
     $ redis-cli
-    redis 127.0.0.1:6379> set app.example.com "http://antonlindstrom.com/"
+    redis 127.0.0.1:6379> set app.example.com "http://localhost:3000/"
 
 ### Release
 
