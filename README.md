@@ -84,6 +84,12 @@ You may recieve:
 This is a ulimit problem, increase the ulimit-limit and it should continue to
 serve requests (and responses).
 
+GZIP:ed pages will not work, the proxy will not serve the request and curl says:
+
+    curl: (56) Problem (2) in the Chunked-Encoded data
+
+This is being worked on.
+
 ## Future improvements
 
 * Add logging
