@@ -88,8 +88,6 @@ GZIP:ed pages will not work, the proxy will not serve the request and curl says:
 
     curl: (56) Problem (2) in the Chunked-Encoded data
 
-This is being worked on.
-
 ## Future improvements
 
 * Add logging
